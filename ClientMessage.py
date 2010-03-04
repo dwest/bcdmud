@@ -1,4 +1,5 @@
 import json
+
 #message type
 ACTION, MESSAGE, ADMIN = range(3)
 
