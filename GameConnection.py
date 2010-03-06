@@ -10,12 +10,14 @@ class GameConnection(Process):
     clientSocket = None
     gameServer = None
     gameInstance = None
+    clientAddress = None
 
 
     def __init__(self, server, socket):
         Process.__init__(self)
         self.clientSocket = socket
         self.gameServer = server
+        print "New connection:",self.clientSocket.getpeername()
 
     def run(self):
         if self.clientSocket is None or self.gameServer is None:
@@ -35,8 +37,23 @@ class GameConnection(Process):
                     except InvalidMessageError:
                         print "Invalid Message from client: "+repr(self.clientSocket.getpeername())
                     message = r
-            return
+            return 
+
 
     def close(self):
         self.clientSocket.shutdown(socket.SHUT_RDWR)
         self.clientSocket.close()
+
+"""
+        while len(message) < MAXMSGLEN:
+            while 1:
+                data = self.clientSocket.recv(1024)
+                if not data: break #socket is now closed
+                else:
+                    try:
+                        cMessage = ClientMessage(m)
+                        print cMessage
+                    except InvalidMessageError:
+                        print "Invalid Message from client: "+repr(self.clientSocket.getpeername())
+                        return
+"""
