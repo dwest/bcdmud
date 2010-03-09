@@ -36,6 +36,9 @@ class ClientMessage:
             raise InvalidMessageError
 
     def validate(self, validItems, payload):
+        if not type(payload) is dict:
+            raise InvalidMessageError
+
         for item in validItems:
             if item in payload:
                 self.mpayload = {item: payload[item]}
