@@ -6,7 +6,7 @@ ACTION, MESSAGE, ADMIN = range(3)
 #valid actions
 actions = ['move', 'cast', 'use', 'do']
 messageTypes = ['say', 'yell', 'party']
-adminOps = ['connect', 'gamelist', 'update', 'start']
+adminOps = ['connect', 'gamelist', 'update', 'start', 'register', 'auth', 'username', 'password']
 
 class ClientMessage:
     """Takes a JSON encoded string and attempt to turn it 

@@ -35,15 +35,22 @@ class GameServer:
                 s.close()
             self.listeningSocket.close()
 
-    def handleMessage(self, connection, message):
-        if connection not in activeConnections:
-            connection.close()
+    def connect(self, client, gameId, private=''):
+        if not client.authenticated():
+            raise UnauthenticatedClientError
 
-        if connection.gameInstance is not None:
-            connection.gameInstance.handleMessage(connection, message)
+        game = self.getGameById(gameId)
+        game.connect(client)
+        return True
 
-        if message.mtype == ClientMessage.ADMIN:
-            if 'connect' in message:
-                self.connect(connection, message['connect'])
-            elif 'gamelist' in message:
-                self.listGames(connection)
+    def register(self, name, password):
+        pass
+
+    def auth(self, name, password):
+        pass
+
+    def gamelist(self):
+        return {}
+
+    def start(self, client, gameName, private=''):
+        pass

@@ -39,7 +39,6 @@ class GameConnection(Process):
                     message = r
             return 
 
-
     def close(self):
         self.clientSocket.shutdown(socket.SHUT_RDWR)
         self.clientSocket.close()
