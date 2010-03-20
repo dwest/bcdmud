@@ -9,14 +9,14 @@ DELIMITER = "\n"
 class GameConnection(Process):
     clientSocket = None
     gameServer = None
-    gameInstance = None
     clientAddress = None
+    proxy = None
 
-
-    def __init__(self, server, socket):
+    def __init__(self, server, socket, instance):
         Process.__init__(self)
         self.clientSocket = socket
         self.gameServer = server
+        self.proxy = ServerProxy(self, self.gameServer, instance)
         print "New connection:",self.clientSocket.getpeername()
 
     def run(self):
@@ -33,11 +33,14 @@ class GameConnection(Process):
                 if p != '':
                     try:
                         cMessage = ClientMessage(m)
-                        print cMessage
+                        self.proxy.handleMessage(cMessage)
                     except InvalidMessageError:
                         print "Invalid Message from client: "+repr(self.clientSocket.getpeername())
                     message = r
             return 
+
+    def send(self, message):
+        self.clientSocket.send(message)
 
     def close(self):
         self.clientSocket.shutdown(socket.SHUT_RDWR)

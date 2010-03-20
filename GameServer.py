@@ -8,6 +8,8 @@ class GameServer:
     activeConnections = set()
     activeGames = dict()
     listeningSocket = None
+    # TODO: use the dict above
+    gameInstance = GameInstance()
     
     def __init__(self, HOST, PORT):
         try:
@@ -27,7 +29,7 @@ class GameServer:
         try:
             while 1:
                 (clientsocket, address) = self.listeningSocket.accept()
-                connection = GameConnection(self, clientsocket)
+                connection = GameConnection(self, clientsocket, gameInstance)
                 self.activeConnections.add(connection)
                 connection.start()
         except KeyboardInterrupt:
