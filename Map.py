@@ -1,29 +1,35 @@
 class Map:
-    map
+    level
     height
     width
 
-    def __init__(self, newMap):
-        self.map = newMap
-        height = len(self.map)
-        width = len(self.map[0])
+    def __init__(self, level):
+        self.level = level
+        self.height = len(self.level)
+        self.width = len(self.level[0])
 
-    def setMap(self, newMap):
-        self.map = newMap
-        self.height = len(self.map)
-        self.width = len(self.map[0])
+    def setMap(self, level):
+        self.level = level
+        self.height = len(self.level)
+        self.width = len(self.level[0])
 
     def setTile(self, x, y, tile):
-        self.map[y][x] = tile
+        self.level[y][x] = tile
 
     def getMap(self):
-        return self.map
+        return self.level
 
     def getTile(self, x, y):
-        return map[y][x];
+        return self.level[y][x];
 
     def getHeight(self):
         return self.height
 
     def getWidth(self):
         return self.width
+
+class VisibleMap(Map):
+    pass
+
+class Remembered(Map):
+    pass
