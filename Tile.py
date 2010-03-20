@@ -1,27 +1,33 @@
 class Tile:
-    passable
-    visibility
-    material
+    passable = 0
+    visibility = 0
+    stack = []
 
-    def __init__(self, passable, visibility, material):
+    def __init__(self, passable, visibility, base):
         self.passable = passable
         self.visibility = visibility
-        self.material = material
+        self.stack.append(base)
 
-    def setPassable(passable):
+    def setPassable(self, passable):
         self.passable = passable
         
-    def setVisibility(visibility):
+    def setVisibility(self, visibility):
         self.visibility = visibility
 
-    def setMaterial(material):
-        self.material = material
+    def getObjectStack(self):
+        return self.stack
 
-    def getPassable():
+    def addObject(self, obj):
+        self.stack.append(obj)
+
+    def removeObject(self, obj):
+        self.stack.remove(obj)
+
+    def getTopObject(self):
+        return self.stack[-1:]
+
+    def getPassable(self):
         return self.passable
 
-    def getVisibility():
+    def getVisibility(self):
         return self.visibility
-
-    def getMaterial():
-        return self.Material
