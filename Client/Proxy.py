@@ -4,6 +4,11 @@ import json
 class Proxy:
 
     socket = None
+    inputType = {'w': ("move", 0),
+                 'a': ("move", 3),
+                 's': ("move", 2),
+                 'd': ("move", 1),
+                 }
 
     def __init__(self, HOST, PORT):
         try:
@@ -13,14 +18,25 @@ class Proxy:
             print "Exception thrown trying to connect to remote address "
             print msg
 
-    def action(self, type, dir):
+    def handleInput(self, input):
+        if input in self.inputType:
+            msg = self.inputType[input]
+            if msg[0] == "move":
+                self.action(msg)
+
+    def action(self, action):
         """
         Example: {"action": {"move": 0}}
-
+          ^
+          0
+        <3 1>
+          2
+          v
         Encode move action and send to server
         Perhaps we should store all available actions 
         in DB, but IDK that would require query every startup
         """
+        (type, dir) = action
         action = json.dumps({"action": {type: dir}})
         self.sendRequest("action", action)
 

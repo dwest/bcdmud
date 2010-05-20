@@ -8,11 +8,13 @@ class ServerProxy:
     client = None
     server = None
     instance = None
+    player = None
 
     def __init__(self, client, server, instance=None):
         self.client = client
         self.server = server
         self.instance = instance
+        self.player = instance.addPlayer()
 
     def handleMessage(self, message):
         #must be an instance of ClientMessage for any of these calls to work...
@@ -42,6 +44,9 @@ class ServerProxy:
             self.instance.playerDo(client, action['do'])
         else:
             raise InvalidMessageError
+
+        self.client.sendMessage(instance.getLevel())
+        self.client.sendMessage(instance.getVisible())
 
     def doMessage(self, message):
         for t in ClientMessage.messageTypes:
