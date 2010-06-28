@@ -1,16 +1,12 @@
 import urwid
+from Window import Window
 
-class InventoryView(urwid.WidgetWrap):
+class InventoryView(Window):
     
-    def __init__(self, screen):
-        self.screen = screen
+    def __init__(self, screen, start_text = "Inventory"):
         # Use a ListWalker here also
         # Get Items from player class
-        (cols, rows) = screen.get_cols_rows()
-        self.content = urwid.Text("Invetory goes here\nColumns: "+str(cols)
-                                  +" Rows: "+str(rows))
-        
-        urwid.WidgetWrap.__init__(self, self.content)
+        Window.__init__(self, screen, start_text)
 
     def setContent(self, content):
         (cols, rows) = self.screen.get_cols_rows()

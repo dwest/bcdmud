@@ -1,14 +1,14 @@
 import math
 import urwid
+from Window import Window
 
-class MapView(urwid.WidgetWrap):
+class MapView(Window):
 
-    def __init__(self, screen, proxy):
+    def __init__(self, screen, proxy, start_text = "Map"):
+        Window.__init__(self, screen, start_text)
+
         self.proxy = proxy
-        self.screen = screen
-        self.content = urwid.Text("")
         self.updateMap()
-        urwid.WidgetWrap.__init__(self, self.content)
 
     def updateMap(self):
         text = ""

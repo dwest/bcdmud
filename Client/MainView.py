@@ -17,9 +17,9 @@ Check http://excess.org/urwid/reference.html for info on urwid.
 
 import urwid
 import sys
-from MapView import *
-from ChatView import *
-from InventoryView import *
+from MapView import MapView
+from ChatView import ChatView
+from InventoryView import InventoryView
 
 class MainView(urwid.WidgetWrap):
     

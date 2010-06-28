@@ -1,13 +1,8 @@
 import urwid
+from Window import Window
 
-class ChatView(urwid.WidgetWrap):
+class ChatView(Window):
     
-    def __init__(self, screen):
-        self.screen = screen
-        # TODO: Change this to ListWalker
-        self.content = urwid.Text("chat lolz")
+    def __init__(self, screen, start_text = "Chat"):
+        Window.__init__(self, screen, start_text)
 
-        urwid.WidgetWrap.__init__(self, self.content)
-
-    def setContent(self, content):
-        self.content.set_text(content)

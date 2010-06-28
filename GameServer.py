@@ -1,58 +1,70 @@
-from multiprocessing import Process, Queue
-from GameConnection import *
+import SocketServer
+import Queue
+import multiprocessing
+from multiprocessing import Queue, Process
+
 from ClientMessage import *
-import socket
-import sys
+from ServerProxy import *
 
-class GameServer:
-    activeConnections = set()
-    activeGames = dict()
-    listeningSocket = None
-    # TODO: use the dict above
-    gameInstance = GameInstance()
-    
-    def __init__(self, HOST, PORT):
-        try:
-            self.listeningSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.listeningSocket.bind((HOST, PORT))
-        except socket.error, msg:
-            print "Exception thrown trying to bind port: "
-            print msg
+class TCPHandler(SocketServer.StreamRequestHandler):
 
-    def host(self):
-        if self.listeningSocket is None:
-            print "Unable to host on empty socket!"
-            return
+    def handle(self):
+        # Toss request on queue
+        gameQueue.put(self.request.recv(4096))
 
-        self.listeningSocket.listen(5)
+class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
 
-        try:
-            while 1:
-                (clientsocket, address) = self.listeningSocket.accept()
-                connection = GameConnection(self, clientsocket, gameInstance)
-                self.activeConnections.add(connection)
-                connection.start()
-        except KeyboardInterrupt:
-            for s in self.activeConnections:
-                s.close()
-            self.listeningSocket.close()
+    def setQueueProcess(self, queue):
+        self.queueProcess = queue
 
-    def connect(self, client, gameId, private=''):
-        if not client.authenticated():
-            raise UnauthenticatedClientError
+class QueueProcess(Process):
 
-        game = self.getGameById(gameId)
-        game.connect(client)
-        return True
+    def __init__(self, queue, proxy):
+        Process.__init__(self)
+        self.queue = queue
 
-    def register(self, name, password):
-        pass
+    # Get next item from queue
+    # Create ClientMessage obj
+    def run(self):
+        while True:
+            item = self.queue.get()
+            try:
+                message = ClientMessage(item)
+            except InvalidMessageError, err_msg:
+                print ""
+                print err_msg, item
 
-    def auth(self, name, password):
-        pass
 
-    def gamelist(self):
-        return {}
+# Create and start the class that will process 
+# items on the queue
+gameQueue = Queue()
+p = QueueProcess(gameQueue)
+p.start()
 
-    def start(self, client, gameName, private=''):
-        pass
+# Create server proxy
+
+
+# Create the server 
+HOST, PORT = "localhost", 0
+server = ThreadedTCPServer((HOST, PORT), TCPHandler)
+server.setQueueProcess(p)
+server_process = Process(target=server.serve_forever)
+server_process.daemon = True
+server_process.start()
+
+ip, add = server.server_address
+print ip," ",add
+
+
+# Show the server CLI
+# TODO: Make ServerCLI class!
+message = ""
+while message != 'bye':
+    try:
+        message = raw_input(">> ")
+    except EOFError:
+        break
+
+print "\n"
+p.terminate()
+server_process.terminate()
