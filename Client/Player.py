@@ -1,8 +1,11 @@
+from Item import Item
+from Inventory import Inventory
+
 class Player:
     
-    __x = None
-    __y = None
-    __inventory = None
+    x = None
+    y = None
+    inventory = None
     
     def __init__(self, proxy):
         self.proxy = proxy
@@ -14,25 +17,55 @@ class Player:
         #self.__y = self.proxy.getY()
         #self.__inventory = self.proxy.getInventory()
         
-        # TODO: (x, y) will be retrieved from server
-        self.__x = 3
-        self.__y = 4
-        # TODO: this should contain 'Items' (class)
-        self.__inventory = ['sword', 'wand']
+        self.x = self.proxy.getX()
+        self.y = self.proxy.getY()
 
+        self.inventory = self.proxy.getInventory()
+
+    def canMove(self):
+        # TODO: Do tests handicaps here
+        return True
+    
     def moveNorth(self):
-        # TODO: continue here
-        pass 
+        if self.canMove and self.canMoveNorth:
+            self.y -= 1
 
+    def moveSouth(self):
+        if self.canMove and self.canMoveSouth:
+            self.y += 1
+
+    def moveEast(self):
+        if self.canMove and self.canMoveEast:
+            self.x += 1
+    def moveWest(self):
+        if self.canMove and self.canMoveWest:
+            self.x -= 1
+
+    def canMoveNorth(self):
+        # Check for walls and mess
+        return True
+
+    def canMoveSouth(self):
+        # Check for walls and mess
+        return True
+
+    def canMoveWest(self):
+        # Check for walls and mess
+        return True
+
+    def canMoveEast(self):
+        # Check for walls and mess
+        return True
+                        
     def getX(self):
-        return self.__x
+        return self.x
 
     def getY(self):
-        return self.__Y
+        return self.y
 
     def getInventory(self):
-        return self.__inventory
+        return self.inventory
     
     def getItemByName(self, name):
-        return a.[a.index(name)]
+        return a[a.index(name)]
     

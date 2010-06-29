@@ -1,5 +1,7 @@
 import socket
 import json
+from Item import Item
+from Inventory import Inventory
 
 class Proxy:
 
@@ -14,34 +16,11 @@ class Proxy:
             print msg
 #        self.player = self.getPlayer()
 
-    def getMap(self, maxRow, maxCol):
-        """ This is just for testing now
-        Should be accessing server here"""
+    def getX(self):
+        return 37
 
-        (playerX, playerY) = (45,37)
-        f = open('map.txt')
-        vizmap = f.readlines()
-        vizmap[playerY] = vizmap[playerY][:playerX] + "@" + vizmap[playerY][playerX+1:]
+    def getY(self):
+        return 45
 
-        # These create a box that centers
-        # the player in the map
-        topY = playerY-(maxRow/2)
-        bottomY = playerY+(maxRow/2)
-        leftX = playerX-(maxCol/2)
-        rightX = playerX+(maxCol/2)
-        # slicing with negative number doesn't work
-        if topY < 0:
-            topY = 0
-        if leftX < 0:
-            leftX = 0
-
-        # trim off rows
-        vizmap = vizmap[topY:bottomY]        
-        # trim off columns
-        for i in range(0,len(vizmap)):
-            vizmap[i] = vizmap[i].strip()[leftX:rightX-2]+"\n"
-        
-        return vizmap
-
-
-        
+    def getInventory(self):
+        return Inventory([Item('sword'), Item('lazers')])
