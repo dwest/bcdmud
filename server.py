@@ -30,9 +30,11 @@ class ChatServer(Thread):
         Thread.__init__(self)
         self.clients = list()
         self.lock = Semaphore()
+        # Set this to false when you want to stop chat server
+        self.RUNNING = True
 
     def run(self):
-        while True:
+        while self.RUNNING:
             self.lock.acquire()
             for c in self.clients:
                 try:
@@ -65,6 +67,7 @@ class ChatServer(Thread):
 if __name__ == "__main__":
     # Create the chat server to pass messages between clients
     chatserver = ChatServer()
+    
     # Start the chat server
     chatserver.start()
 
@@ -88,5 +91,6 @@ if __name__ == "__main__":
     message = ""
     while message != "bye":
         message = raw_input("Type bye to exit: ")
-
+        
+    chatserver.RUNNING = False
     server.shutdown()
