@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from Proxy import Proxy
 from Map import Map
 from Player import Player
@@ -28,7 +29,7 @@ class Client:
         # create chat model
         
         chatView = ChatView(self.screen)
-        mapView = MapView(self.screen, self.mapModel)
+        mapView = MapView(self.screen, self.mapModel, self.playerModel)
         inventoryView = InventoryView(self.screen, self.playerModel)
         
         viewTuple = (chatView, mapView, inventoryView)
@@ -50,14 +51,23 @@ fill = urwid.Filler(m, 'top')
 def handle(input):
     if input in ('q', 'Q'):
         raise urwid.ExitMainLoop()
-    if input is 'w':
+    elif input is 'w':
         client.playerModel.moveNorth()
-    if input is 's':
+    elif input is 's':
         client.playerModel.moveSouth()
-    if input is 'a':
+    elif input is 'a':
         client.playerModel.moveWest()
-    if input is 'd':
+    elif input is 'd':
         client.playerModel.moveEast()
+    elif input is 'W':
+        client.playerModel.moveNorthFast()
+    elif input is 'S':
+        client.playerModel.moveSouthFast()
+    elif input is 'A':
+        client.playerModel.moveWestFast()
+    elif input is 'D':
+        client.playerModel.moveEastFast()
+
 
     m.mapView.updateMap()
     m.chatView.setContent("chat lolz")

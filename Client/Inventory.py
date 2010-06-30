@@ -1,7 +1,7 @@
 from collections import MutableSet
 
 class Inventory(MutableSet):
-    
+
     def __init__(self, iterable):
         self.elements = []
         for value in iterable:

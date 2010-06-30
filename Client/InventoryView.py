@@ -13,6 +13,13 @@ class InventoryView(Window):
 
     def setContent(self, content):
         (cols, rows) = self.screen.get_cols_rows()
-        self.content.set_text("Invetory goes here\nColumns: "+str(cols)+" Rows: "+str(rows))
+        playerPos = str(self.player.getX()) + ", " + str(self.player.getY())
+        inventoryList = ""
+        for item in self.player.getInventory():
+            inventoryList += item.getName()+"\n"
+            
+        self.content.set_text(playerPos + "\n\n" + inventoryList)
+            
+        
 
     

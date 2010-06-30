@@ -23,7 +23,7 @@ class Player:
         self.inventory = self.proxy.getInventory()
 
     def canMove(self):
-        # TODO: Do tests handicaps here
+        # TODO: Do tests for handicaps here
         return True
     
     def moveNorth(self):
@@ -40,6 +40,24 @@ class Player:
     def moveWest(self):
         if self.canMove and self.canMoveWest:
             self.x -= 1
+
+####################################################
+# These moveFast functions are really just for 
+# testing. Unless, Daniel, you want to have some
+# type of haste ability. BTW they are capital W,A,S,D
+    def moveNorthFast(self):
+        if self.canMove and self.canMoveNorth:
+            self.y -= 2
+    def moveSouthFast(self):
+        if self.canMove and self.canMoveSouth:
+            self.y += 2
+    def moveEastFast(self):
+        if self.canMove and self.canMoveEast:
+            self.x += 2
+    def moveWestFast(self):
+        if self.canMove and self.canMoveWest:
+            self.x -= 2
+####################################################
 
     def canMoveNorth(self):
         # Check for walls and mess
