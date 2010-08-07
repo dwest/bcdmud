@@ -1,7 +1,7 @@
 import random
 
-empty_char = '0'
-floor_char = '1'
+empty_char = 0
+floor_char = 1
 minmax_size = (3, 6)
 minmax_rooms = (6, 9)
 map_size = (20, 40)
