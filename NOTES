@@ -1,84 +1,62 @@
-=====================
-  Some random notes
-=====================
+Protocol
+=========
+- Flat arrays
+- JSON encoded
+- newline (\n) separated
+- if newline is needed in message must be escaped with \
 
 
+Client
+----------
+{ [type] : [value] }\n
 
-User Interface
-===============
-               Gameplay                 Item
-      +-----------------------------+-----------+
-      |                             |           |
-      |                             | Equip.    |
-      |                             |   Panel   |
-      |                             |           |
-      |       Game Panel            |           |
-      |                             |           |
-      |                             +-----------+
-      |                             |           |
-      |                             | Inven.    |
-      |                             |   Panel   |
-      |                             |           |
-      +-----------------------------+           |
-      |        Chat Panel           |           |
-      +-----------------------------+-----------+              
+[type] -> 'move'
+       |  'cast'
+       |  'use'
+       |  'do'
+       |  'say'
+       |  'yell'
+       |  'party'
 
+[value] -> [INTEGER]
+	|  [STRING]
 
-Client-Server comm
-==================
+{ request : [request-value] }\n
 
-action   -> move  <DIR>
-	 -> cast  <SPELL_ID>
-	 -> use	  <ITEM_ID>
-	 -> do	  <ACTION_ID>
+// TODO 
+[request-value] -> 'inventory'
 
-message  -> say   <TEXT>
-	 -> yell  <TEXT>
-	 -> gobal <TEXT>
+Server
+---------
+{ [type] : [value] }\n
 
-admin	 -> listgames
-	 -> connect <GAME_ID>
-	 -> quit
+[type] -> 'announce'
+       |  'player-status' ?? player
+       |  'inventory'
+       |  'map'
+       |  'NPC-status' ?? NPC
+       |  'items'
+       
 
-{"action": {"move": 0}}
-{"action": {"cast": 4}}
-{"message": {"yell": "ohai"}}
+Player
+========
+health
+stamina
+mana
+strength
+intellect
+reputation
+charisma
 
+Inventory
+=========
+half-rotten stick - 50% chance of breaking
 
-Hott Pics
-===========
+Tile
+=====
+passable
+impassable
 
-	CLIENT-------------> +---------+
-	|     \		     |Receiver?|
-        |      \	     +---------+
-        |       \ 
-        |        \
-        |         > UI
-	V	      +----------+
-      +-----+	      |	 <  r	 |
-      |Proxy|	      |	 @  	 |
-      +-----+	      |	   g	 |
-	)	      +----------+
-	(
-	)
-	(
-	[X]~~~~~~~~ +------+
-		    |Server|
-		    +------+
-	  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Map
+=====
+Stored as array 

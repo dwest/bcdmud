@@ -8,6 +8,7 @@ from MapView import MapView
 from ChatView import ChatView
 from InventoryView import InventoryView
 
+import sys
 import urwid
 
 class Client:
@@ -41,7 +42,7 @@ class Client:
 ###################
 # Main
 ###################    
-proxy = Proxy('localhost',12345)
+proxy = Proxy('localhost',int(sys.argv[1]))
 scr = urwid.raw_display.Screen()
 client = Client(proxy, scr)
 
@@ -67,7 +68,6 @@ def handle(input):
         client.playerModel.moveWestFast()
     elif input is 'D':
         client.playerModel.moveEastFast()
-
 
     m.mapView.updateMap()
     m.chatView.setContent("chat lolz")

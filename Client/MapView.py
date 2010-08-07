@@ -63,3 +63,6 @@ class MapView(Window):
     def getMaxRows(self):
         rows = self.getRows()
         return int(rows*(2/3.0))
+
+    def setContent(self, content):
+        self.content.set_text(content)

@@ -12,7 +12,7 @@ class Proxy:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.connect((host, port))
         except socket.error, msg:
-            print "Exception thrown trying to connect to server "
+#            print "Exception thrown trying to connect to server "
             print msg
 #        self.player = self.getPlayer()
 
@@ -24,3 +24,19 @@ class Proxy:
 
     def getInventory(self):
         return Inventory([Item('sword'), Item('lazers')])
+
+    def moveNorth(self):
+        self.sendMessage('move', 'UP')
+
+    def moveSouth(self):
+        self.sendMessage('move', 'DOWN')
+
+    def moveEast(self):
+        self.sendMessage('move', 'RIGHT')
+
+    def moveWest(self):
+        self.sendMessage('move', 'LEFT')
+
+    def sendMessage(self, key, value):
+        message = json.dumps({key:value})+"\n"
+        self.socket.send(message)

@@ -17,8 +17,10 @@ class Player:
         #self.__y = self.proxy.getY()
         #self.__inventory = self.proxy.getInventory()
         
-        self.x = self.proxy.getX()
-        self.y = self.proxy.getY()
+#        self.x = self.proxy.getX()
+#        self.y = self.proxy.getY()
+        self.x = 1
+        self.y = 1
 
         self.inventory = self.proxy.getInventory()
 
@@ -27,19 +29,20 @@ class Player:
         return True
     
     def moveNorth(self):
-        if self.canMove and self.canMoveNorth:
-            self.y -= 1
+        #self.proxy.moveNorth()
+        self.y -= 1
 
     def moveSouth(self):
-        if self.canMove and self.canMoveSouth:
-            self.y += 1
+#        self.proxy.moveSouth()
+        self.y += 1
 
     def moveEast(self):
-        if self.canMove and self.canMoveEast:
-            self.x += 1
+#        self.proxy.moveEast()
+        self.x += 1
+
     def moveWest(self):
-        if self.canMove and self.canMoveWest:
-            self.x -= 1
+#        self.proxy.moveWest()
+        self.x -= 1
 
 ####################################################
 # These moveFast functions are really just for 
