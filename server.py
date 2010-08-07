@@ -115,7 +115,10 @@ class GameServer(Thread):
         if self.clients.index(client) in self.locations:
             curr_location = self.locations[self.clients.index(client)]
         else:
-            curr_location = (7,7)
+            for i in range(0, len(self.map)):
+                for j in range(0, len(self.map[i])):
+                    if self.map[i][j] == 1:
+                        curr_location = (i, j)
         
         if direction == "LEFT":
             for others in self.locations:
