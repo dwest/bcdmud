@@ -1,62 +1,42 @@
 import socket
 import json
+from Item import Item
+from Inventory import Inventory
 
 class Proxy:
 
     socket = None
-    inputType = {'w': ("move", 0),
-                 'a': ("move", 3),
-                 's': ("move", 2),
-                 'd': ("move", 1),
-                 }
 
-    def __init__(self, HOST, PORT):
+    def __init__(self, host, port):
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.socket.connect((HOST,PORT))
+            self.socket.connect((host, port))
         except socket.error, msg:
-            print "Exception thrown trying to connect to remote address "
+#            print "Exception thrown trying to connect to server "
             print msg
+#        self.player = self.getPlayer()
 
-    def handleInput(self, input):
-        if input in self.inputType:
-            msg = self.inputType[input]
-            if msg[0] == "move":
-                self.action(msg)
+    def getX(self):
+        return 37
 
-    def action(self, action):
-        """
-        Example: {"action": {"move": 0}}
-          ^
-          0
-        <3 1>
-          2
-          v
-        Encode move action and send to server
-        Perhaps we should store all available actions 
-        in DB, but IDK that would require query every startup
-        """
-        (type, dir) = action
-        action = json.dumps({"action": {type: dir}})
-        self.sendRequest("action", action)
+    def getY(self):
+        return 45
 
-    def message(self, vol, msg):
-        """
-        Example: {"message": {"yell": "Hello World"}}
-        """
-        say = json.dumps({"message": {vol: msg}})
-        self.sendRequest("message", say)
+    def getInventory(self):
+        return Inventory([Item('sword'), Item('lazers')])
 
-    def sendRequest(self, type, req):
-        """
-        Append every message with \n for use with
-        DELIMITER in GameConnection
-        """
-        try:
-            self.socket.sendall(req+'\n')
-        except socket.error, msg:
-            print "Exception thrown on "+type+" ",msg
+    def moveNorth(self):
+        self.sendMessage('move', 'UP')
 
-    def close(self):
-        self.socket.shutdown(socket.SHUT_RDWR)
-        self.socket.close()
+    def moveSouth(self):
+        self.sendMessage('move', 'DOWN')
+
+    def moveEast(self):
+        self.sendMessage('move', 'RIGHT')
+
+    def moveWest(self):
+        self.sendMessage('move', 'LEFT')
+
+    def sendMessage(self, key, value):
+        message = json.dumps({key:value})+"\n"
+        self.socket.send(message)

@@ -172,6 +172,7 @@ class GameServer(Thread):
         try:
             message = json.loads(message)
             self.movePlayer(client, message['move'])
+            print self.getGameState()
             client.send(self.getGameState())
         except ValueError:
             print "Not a game message!"
