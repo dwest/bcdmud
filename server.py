@@ -26,7 +26,7 @@ class ThreadedTCPRequestHandler(SocketServer.StreamRequestHandler):
             readable, writable, error = select([self.request], [], [], 0)
             if self.request in readable:
                 self.data = self.rfile.readline().strip()
-                p.send("%s wrote: %s" % (self.client_address[0], self.data))
+                p.send(self.data)
                 q.send(self.data)
 
 class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
@@ -70,12 +70,20 @@ class ChatServer(Thread):
         self.lock.release()
 
     def relayMessage(self, client, message):
+        print "----"
+        print message
+        print "----"
+
+        message = json.dumps(message)
+        if 'say' not in message:
+            return 
+
         # assuming that this will only be called by the chatserver's run method
         # also assuming that the client list is locked from modification
         for c in self.clients:
             if c is client:
                 continue
-            c.send(message)
+            c.send(message['say'])
 
 class GameServer(Thread):
 
@@ -173,12 +181,13 @@ class GameServer(Thread):
         # message should be a json encoded object
         try:
             message = json.loads(message)
-            self.movePlayer(client, message['move'])
-            print self.getGameState()
-            client.send(self.getGameState())
+            if "move" in message:
+                self.movePlayer(client, message['move'])
+                print self.getGameState()
+                client.send(self.getGameState())
         except ValueError:
-            print "Not a game message!"
-        
+            pass
+
 if __name__ == "__main__":
     # Create the chat server to pass messages between clients
     chatserver = ChatServer()
