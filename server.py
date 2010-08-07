@@ -7,6 +7,8 @@ from select import select
 from copy import deepcopy
 import json
 
+from tmp_mapgen import *
+
 class ThreadedTCPRequestHandler(SocketServer.StreamRequestHandler):
 
     def handle(self):
@@ -80,22 +82,7 @@ class GameServer(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.clients = list()
-        self.map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0],
-                    [0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0],
-                    [0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        self.map = make_level()
         self.locations = {}
         self.lock = Semaphore()
         # Set this to false when you want to stop the game server
@@ -128,18 +115,30 @@ class GameServer(Thread):
         if self.clients.index(client) in self.locations:
             curr_location = self.locations[self.clients.index(client)]
         else:
-            curr_location = (7, 7)
-
+            curr_location = (7,7)
+        
         if direction == "LEFT":
+            for others in self.locations:
+                if self.locations[others][1] == curr_location[1]-1 and self.locations[others][0] == curr_location[0]:
+                    return
             if self.map[curr_location[0]][curr_location[1]-1] == 1:
                 curr_location = (curr_location[0], curr_location[1]-1)
         elif direction == "RIGHT":
+            for others in self.locations:
+                if self.locations[others][1] == curr_location[1]+1 and self.locations[others][0] == curr_location[0]:
+                    return
             if self.map[curr_location[0]][curr_location[1]+1] == 1:
                 curr_location = (curr_location[0], curr_location[1]+1)
         elif direction == "UP":
+            for others in self.locations:
+                if self.locations[others][0] == curr_location[0]-1 and self.locations[others][1] == curr_location[1]:
+                    return
             if self.map[curr_location[0]-1][curr_location[1]] == 1:
                 curr_location = (curr_location[0]-1, curr_location[1])
         elif direction == "DOWN":
+            for others in self.locations:
+                if self.locations[others][0] == curr_location[0]+1 and self.locations[others][1] == curr_location[1]:
+                    return
             if self.map[curr_location[0]+1][curr_location[1]] == 1:
                 curr_location = (curr_location[0]+1, curr_location[1])
 
